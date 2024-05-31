@@ -8,9 +8,9 @@ const Dashboard = () => {
 
 
   useEffect(() => {
-    setHeaderText('Dashboard')
+    setHeaderText('Nextjs Layout Template')
     setMainTitle('Dashboard')
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
