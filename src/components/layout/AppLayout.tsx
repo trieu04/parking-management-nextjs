@@ -1,31 +1,17 @@
 import { Box, CssBaseline, GlobalStyles, IconButton, Sheet, Typography } from "@mui/joy"
 import { CssVarsProvider } from "@mui/joy/styles"
-import AppSidebar from "./AppSidebar"
-import AppHeader from "./AppHeader"
-import AppFeatureBar from "./AppFeatureBar"
+import NavBar from "./NavBar"
+import Header from "./Header"
 import { NextPage } from "next/types"
 import React, { useState } from "react"
+import MainWarp from "./MainWarp"
+import { LayoutContextProvider } from "./LayoutContext"
 
 
 export type AppLayoutPage = NextPage & {
     layoutName: "app"
 }
 
-export type BreadcumsBlock = {
-    title: string,
-    href: string
-}
-
-type AppLayoutContextType = {
-    headerText: string,
-    setHeaderText: React.Dispatch<React.SetStateAction<string>>
-    title: string,
-    setTitle: React.Dispatch<React.SetStateAction<string>>
-    breadcums: BreadcumsBlock[],
-    setBreadcums: React.Dispatch<React.SetStateAction<BreadcumsBlock[]>>
-}
-
-export const AppLayoutContext = React.createContext<AppLayoutContextType>({} as AppLayoutContextType)
 
 
 export default function AppLayout({
@@ -33,31 +19,11 @@ export default function AppLayout({
 }: {
     children: React.ReactNode
 }) {
-    const [headerText, setHeaderText] = useState("")
-    const [breadcums, setBreadcums] = useState<BreadcumsBlock[]>([])
-    const [title, setTitle] = useState("")
+
     return (
-        <AppLayoutContext.Provider value={{
-            headerText,
-            setHeaderText,
-            title,
-            setTitle,
-            breadcums,
-            setBreadcums
-        }}>
-
-
+        <LayoutContextProvider>
             <CssVarsProvider disableTransitionOnChange>
                 <CssBaseline />
-                <GlobalStyles styles={(theme) => ({
-                    ':root': {
-                        '--Sidebar-width': '240px',
-                        '--Header-height': '52px',
-                        '--SideNavigation-desktopSlideIn': 1, // #TODO
-                        '--SideNavigation-mobileSlideIn': 0,
-                    }
-                })} />
-
                 <Box
                     sx={{
                         display: 'grid',
@@ -67,55 +33,15 @@ export default function AppLayout({
                         minHeight: '100vh'
                     }}
                 >
-                    <Box component="nav"
-                        sx={{
-                            gridArea: "nav",
-                            position: "sticky",
-                            height: "100vh",
-                            top: 0,
-                            zIndex: 10000,
-                        }}
-                    >
 
-                        <AppSidebar />
+                    <NavBar />
 
-                    </Box>
+                    <Header />
 
-                    <Box component="header"
-                        sx={{
-                            gridArea: 'header',
-                            position: 'sticky',
-                            top: 0,
-                            zIndex: 10010,
-                        }}
-                    >
+                    <MainWarp>{children}</MainWarp>
 
-                        <AppHeader headerText={headerText} />
-
-                    </Box>
-
-                    <Box component="main"
-                        sx={{
-                            overflow: 'auto',
-                            position: 'relative',
-                            maxHeight: '100vh',
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                position: 'absolute'
-                            }}
-                        >
-
-                            <AppFeatureBar title={title} />
-                            
-                            {children}
-
-                        </Box>
-
-                    </Box>
                 </Box>
             </CssVarsProvider >
-        </AppLayoutContext.Provider>
+        </LayoutContextProvider>
     )
 }

@@ -1,34 +1,29 @@
-import React, {useEffect, useContext} from 'react'
+import React, { useEffect, useContext } from 'react'
 import Box from '@mui/joy/Box'
-import Button from '@mui/joy/Button'
-import Breadcrumbs from '@mui/joy/Breadcrumbs'
-import Link from '@mui/joy/Link'
-import Typography from '@mui/joy/Typography'
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
-import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded'
-import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded'
-import AppLayout, { AppLayoutContext } from '@/components/layout/AppLayout'
+import { LayoutContext } from '@/components/layout/LayoutContext'
 
 
 const Dashboard = () => {
-  const { setHeaderText, setTitle } = useContext(AppLayoutContext)
+  const { setHeaderText, setMainTitle } = useContext(LayoutContext)
 
 
   useEffect(() => {
     setHeaderText('Dashboard')
-    setTitle('Dashboard')
+    setMainTitle('Dashboard')
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-      <Box
-        className="MainContent"
-        sx={{
-          px: '16px',
-        }}
-      >
-        Some thing here
+    <Box
+      className="MainContent"
+      sx={{
+        px: '16px',
+      }}
+    >
+      Some thing here
 
-      </Box>
+    </Box>
   )
 }
 
