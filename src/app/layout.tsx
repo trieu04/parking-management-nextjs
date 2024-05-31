@@ -18,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ThemeRegistry options={{ key: 'joy' }}>{children}</ThemeRegistry>
+        <ThemeRegistry options={{ key: 'joy' }}>
+          {children}
+        </ThemeRegistry>
       </body>
     </html>
   );

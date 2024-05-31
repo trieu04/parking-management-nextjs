@@ -1,7 +1,6 @@
 'use client'
 
 import { Box, Typography } from '@mui/joy';
-import LoginBtn from '@/components/LoginBtn'
 import { GetStaticProps } from 'next';
 import prisma from '../../prisma/db';
 
@@ -25,7 +24,6 @@ export default function Home(props: Props) {
       <Typography>
         Hello world! This is <b>Parking Management App</b>
       </Typography>
-      <LoginBtn />
       <Typography>
         Current User: {props.userCount}
       </Typography>
