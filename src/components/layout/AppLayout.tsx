@@ -4,96 +4,118 @@ import AppSidebar from "./AppSidebar"
 import AppHeader from "./AppHeader"
 import AppFeatureBar from "./AppFeatureBar"
 import { NextPage } from "next/types"
-import React from "react"
+import React, { useState } from "react"
 
 
-export type AppLayoutPageOption = {
-    breadcums?: string[],
-    title?: string
+export type AppLayoutPage = NextPage & {
+    layoutName: "app"
 }
 
-export type  AppLayoutPage = NextPage & {
-    layout: "app",
-    options?: AppLayoutPageOption
+export type BreadcumsBlock = {
+    title: string,
+    href: string
 }
+
+type AppLayoutContextType = {
+    headerText: string,
+    setHeaderText: React.Dispatch<React.SetStateAction<string>>
+    title: string,
+    setTitle: React.Dispatch<React.SetStateAction<string>>
+    breadcums: BreadcumsBlock[],
+    setBreadcums: React.Dispatch<React.SetStateAction<BreadcumsBlock[]>>
+}
+
+export const AppLayoutContext = React.createContext<AppLayoutContextType>({} as AppLayoutContextType)
+
 
 export default function AppLayout({
-    children,
-    options
+    children
 }: {
-    children: React.ReactNode,
-    options?: AppLayoutPageOption
+    children: React.ReactNode
 }) {
+    const [headerText, setHeaderText] = useState("")
+    const [breadcums, setBreadcums] = useState<BreadcumsBlock[]>([])
+    const [title, setTitle] = useState("")
     return (
-        <CssVarsProvider disableTransitionOnChange>
-            <CssBaseline />
-            <GlobalStyles styles={(theme) => ({
-                ':root': {
-                    '--Sidebar-width': '240px',
-                    '--Header-height': '52px',
-                    '--SideNavigation-desktopSlideIn': 1, // #TODO
-                    '--SideNavigation-mobileSlideIn': 0,
-                }
-            })} />
+        <AppLayoutContext.Provider value={{
+            headerText,
+            setHeaderText,
+            title,
+            setTitle,
+            breadcums,
+            setBreadcums
+        }}>
 
-            <Box
-                sx={{
-                    display: 'grid',
-                    gridTemplateAreas: '"nav header" "nav main"',
-                    gridTemplateColumns: 'min-content 1fr',
-                    gridTemplateRows: 'min-content 1fr',
-                    minHeight: '100vh'
-                }}
-            >
-                <Box component="nav"
+
+            <CssVarsProvider disableTransitionOnChange>
+                <CssBaseline />
+                <GlobalStyles styles={(theme) => ({
+                    ':root': {
+                        '--Sidebar-width': '240px',
+                        '--Header-height': '52px',
+                        '--SideNavigation-desktopSlideIn': 1, // #TODO
+                        '--SideNavigation-mobileSlideIn': 0,
+                    }
+                })} />
+
+                <Box
                     sx={{
-                        gridArea: "nav",
-                        position: "sticky",
-                        height: "100vh",
-                        top: 0,
-                        zIndex: 10000,
+                        display: 'grid',
+                        gridTemplateAreas: '"nav header" "nav main"',
+                        gridTemplateColumns: 'min-content 1fr',
+                        gridTemplateRows: 'min-content 1fr',
+                        minHeight: '100vh'
                     }}
                 >
-                    <AppSidebar />
-                </Box>
-
-                <Box component="header"
-                    sx={{
-                        gridArea: 'header',
-                        position: 'sticky',
-                        top: 0,
-                        zIndex: 10010,
-                    }}
-                >
-                    <Box
+                    <Box component="nav"
                         sx={{
-                            position: 'absolute',
-                            width: '100%',
+                            gridArea: "nav",
+                            position: "sticky",
+                            height: "100vh",
+                            top: 0,
+                            zIndex: 10000,
                         }}
                     >
-                        <AppHeader />
+
+                        <AppSidebar />
+
+                    </Box>
+
+                    <Box component="header"
+                        sx={{
+                            gridArea: 'header',
+                            position: 'sticky',
+                            top: 0,
+                            zIndex: 10010,
+                        }}
+                    >
+
+                        <AppHeader headerText={headerText} />
+
+                    </Box>
+
+                    <Box component="main"
+                        sx={{
+                            overflow: 'auto',
+                            position: 'relative',
+                            maxHeight: '100vh',
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                position: 'absolute'
+                            }}
+                        >
+
+                            <AppFeatureBar title={title} />
+                            
+                            {children}
+
+                        </Box>
 
                     </Box>
                 </Box>
-
-                <Box component="main"
-                    sx={{
-                        overflow: 'auto',
-                        position: 'relative',
-                        maxHeight: '100vh',
-                    }}
-                >
-                    <Box
-                        sx={{
-                            position: 'absolute'
-                        }}
-                    >
-                        <AppFeatureBar title={options?.title}/>
-                        {children}
-                    </Box>
-
-                </Box>
-            </Box>
-        </CssVarsProvider >
+            </CssVarsProvider >
+        </AppLayoutContext.Provider>
     )
 }

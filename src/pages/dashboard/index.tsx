@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, {useEffect, useContext} from 'react'
 import Box from '@mui/joy/Box'
 import Button from '@mui/joy/Button'
 import Breadcrumbs from '@mui/joy/Breadcrumbs'
@@ -7,37 +7,31 @@ import Typography from '@mui/joy/Typography'
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded'
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded'
-import AppLayout, { AppLayoutPage } from '@/components/layout/AppLayout'
+import AppLayout, { AppLayoutContext } from '@/components/layout/AppLayout'
 
 
-const Dashboard: AppLayoutPage = () => {
+const Dashboard = () => {
+  const { setHeaderText, setTitle } = useContext(AppLayoutContext)
+
+
+  useEffect(() => {
+    setHeaderText('Dashboard')
+    setTitle('Dashboard')
+  }, [])
+
   return (
-    <Box
-      className="MainContent"
-      sx={{
-        px: { xs: 2, md: 6 },
-        pt: {
-          xs: 'calc(12px + var(--Header-height))',
-          sm: 'calc(12px + var(--Header-height))',
-          md: 3,
-        },
-        pb: { xs: 2, sm: 2, md: 3 },
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        minWidth: 0,
-        gap: 1,
-      }}
-    >
+      <Box
+        className="MainContent"
+        sx={{
+          px: '16px',
+        }}
+      >
+        Some thing here
 
-
-    </Box>
+      </Box>
   )
 }
 
-Dashboard.layout = "app"
-Dashboard.options = {
-  title: "Dashboard"
-}
+Dashboard.layoutName = "app"
 
 export default Dashboard

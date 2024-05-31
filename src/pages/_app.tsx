@@ -4,8 +4,7 @@ import { SessionProvider } from "next-auth/react"
 import { AppProps } from "next/app"
 
 type DefaultPage = NextPage & {
-    layout?: never,
-    option?: never
+    layoutName?: never
 }
 type AppPropsWithLayout = AppProps & {
     Component: (DefaultPage | AppLayoutPage)
@@ -17,9 +16,9 @@ export default function App({
 
     const children = <Component {...pageProps} />
     const renderLayout = () => {
-        switch (Component.layout) {
+        switch (Component.layoutName) {
             case "app":
-                return <AppLayout options={Component.options}>{children}</AppLayout>
+                return <AppLayout>{children}</AppLayout>
             default:
                 return children
         }

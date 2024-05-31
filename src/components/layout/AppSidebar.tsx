@@ -69,7 +69,6 @@ export default function Sidebar() {
       }}
     />
     <Sheet
-      className="Sidebar"
       sx={{
         position: {
           xs: 'fixed',

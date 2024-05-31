@@ -1,17 +1,22 @@
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded"
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded"
 import { Box, Breadcrumbs, Link, Typography } from "@mui/joy"
+import { useEffect } from "react"
+
+
+export type Props = {
+    title?: string
+}
 
 export default function AppFeatureBar({
     title
-}: {
-    title?: string
-}) {
+}: Props) {
+
     return (
         <Box
             sx={{
                 paddingTop: '62px',
-                px: '20px'
+                px: '16px'
             }}
         >
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
