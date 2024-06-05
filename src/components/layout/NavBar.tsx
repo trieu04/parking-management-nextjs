@@ -97,9 +97,9 @@ export default function NavBar() {
                         }}
                     >
                         <NavMenuItem title="Dashboard" path="/dashboard" />
-                        <NavMenuItemNested title="Parking Lots" path="/parking-lots" nested={[
-                            { title: "Sub 1", path: "/parking-lots/sub-1" },
-                            { title: "Sub 2", path: "/parking-lots/sub-2" }
+                        <NavMenuItemNested title="Parking Lots" path="/lots" nested={[
+                            { title: "Lot 1", path: "/lot/id1" },
+                            { title: "Lot 2", path: "/lot/id2" }
                         ]} />
                     </List>
 
@@ -121,8 +121,8 @@ export default function NavBar() {
                     >
 
 
-                        <NavMenuItem title="Support" path="/support" icon={<SupportRoundedIcon />} />
-                        <NavMenuItem title="Setting" path="/setting" icon={<SupportRoundedIcon />} />
+                        <NavMenuItem title="Support" path="#" icon={<SupportRoundedIcon />} />
+                        <NavMenuItem title="Setting" path="#" icon={<SupportRoundedIcon />} />
                     </List>
                 </Box>
             </Sheet>

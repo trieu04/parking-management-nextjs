@@ -1,29 +1,42 @@
+import NextAuth from "next-auth"
+import CredentialsProvider from "next-auth/providers/credentials"
 import prisma from "@/../prisma/db"
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import NextAuth, { AuthOptions } from "next-auth"
-import GithubProvider from "next-auth/providers/github"
-import GoogleProvider from "next-auth/providers/google"
+import { hash } from "crypto"
 
-export const authOptions: AuthOptions = {
-    adapter: PrismaAdapter(prisma),
-    providers: [],
-    secret: process.env.APP_SECRET
-}
+const credentialProvider = CredentialsProvider({
+    name: 'Credentials',
+    credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" }
+    },
+    async authorize(credentials, req) {
 
-if (process.env.AUTH_GITHUB_ID && process.env.AUTH_GITHUB_SECRET) {
-    authOptions.providers.push(GithubProvider({
-        clientId: process.env.AUTH_GITHUB_ID,
-        clientSecret: process.env.AUTH_GITHUB_SECRET,
-    }))
-}
+        if (!credentials) {
+            return null
+        }
 
-if (process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET) {
-    authOptions.providers.push(GoogleProvider({
-        clientId: process.env.AUTH_GOOGLE_ID,
-        clientSecret: process.env.AUTH_GOOGLE_SECRET,
-        allowDangerousEmailAccountLinking: true,
-    }))
-}
+        const email = credentials.email
+        const passwordHash = hash('SHA256', credentials.password, "base64")
+        const user = await prisma.user.findFirst({
+            where: {
+                passwordHash: passwordHash,
+                email: email
+            }
+        })
 
+        if (user === null) {
+            return null
+        }
 
-export default NextAuth(authOptions)
+        return user
+    }
+})
+
+export default NextAuth({
+    providers: [
+        credentialProvider
+    ],
+    pages: {
+        signIn: '/signin',
+    }
+})
