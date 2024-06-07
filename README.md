@@ -9,6 +9,12 @@ Install dependencies:
 npm install
 ```
 
+Generate Prisma client:
+
+```
+npm generate
+```
+
 Run the development server:
 
 ```
