@@ -27,6 +27,6 @@ const Dashboard = () => {
   )
 }
 
-Dashboard.layoutName = "app"
+Dashboard.layoutName = "home"
 
 export default Dashboard

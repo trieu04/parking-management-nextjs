@@ -1,13 +1,15 @@
-import AppLayout, { AppLayoutPage } from "@/components/layout/AppLayout"
 import { NextPage } from "next/types"
 import { SessionProvider } from "next-auth/react"
 import { AppProps } from "next/app"
+import HomeLayout from "@/components/layout/home/home.layout"
+import LotLayout from "@/components/layout/parking-lot/lot.layout"
 
-type DefaultPage = NextPage & {
-    layoutName?: never
+export type PageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+    layoutName: "home" | "lot"
 }
+
 type AppPropsWithLayout = AppProps & {
-    Component: (DefaultPage | AppLayoutPage)
+    Component: PageWithLayout
 }
 
 export default function App({
@@ -17,8 +19,10 @@ export default function App({
     const children = <Component {...pageProps} />
     const renderLayout = () => {
         switch (Component.layoutName) {
-            case "app":
-                return <AppLayout>{children}</AppLayout>
+            case "home":
+                return <HomeLayout>{children}</HomeLayout>
+            case "lot":
+                return <LotLayout>{children}</LotLayout>
             default:
                 return children
         }

@@ -11,10 +11,10 @@ import List from '@mui/joy/List'
 import Sheet from '@mui/joy/Sheet'
 import Typography from '@mui/joy/Typography'
 import { useColorScheme } from '@mui/joy/styles'
-import { toggleNavBar } from './utils'
-import { UsedSpaceWaringCard } from './InfoCard'
-import { NavMenuItem, NavMenuItemNested } from './NavMenuItem'
-import DarkModeButton from './DarkModeButton'
+import { toggleNavBar } from '../utils'
+import { UsedSpaceWaringCard } from '../InfoCard'
+import { NavMenuItem, NavMenuItemNested } from '../NavMenuItem'
+import DarkModeButton from '../DarkModeButton'
 
 
 export default function NavBar() {

@@ -1,24 +1,20 @@
 import { Box, CssBaseline, GlobalStyles, IconButton, Sheet, Typography } from "@mui/joy"
 import { CssVarsProvider } from "@mui/joy/styles"
-import NavBar from "./NavBar"
-import Header from "./Header"
+import Header from "../Header"
 import { NextPage } from "next/types"
 import React, { useState } from "react"
-import MainWarp from "./MainWarp"
-import { LayoutContextProvider } from "./LayoutContext"
+import MainWarp from "../MainWarp"
+import { LayoutContextProvider } from "@/components/layout/LayoutContext"
 
-
-export type AppLayoutPage = NextPage & {
-    layoutName: "app"
+type Props = {
+    children: React.ReactNode,
+    hideNavBar?: boolean
 }
 
-
-
-export default function AppLayout({
-    children
-}: {
-    children: React.ReactNode
-}) {
+export default function LotLayout({
+    children,
+    hideNavBar
+}: Props) {
 
     return (
         <LayoutContextProvider>
@@ -27,14 +23,11 @@ export default function AppLayout({
                 <Box
                     sx={{
                         display: 'grid',
-                        gridTemplateAreas: '"nav header" "nav main"',
-                        gridTemplateColumns: 'min-content 1fr',
+                        gridTemplateAreas: '"header" "main"',
                         gridTemplateRows: 'min-content 1fr',
                         minHeight: '100vh'
                     }}
                 >
-
-                    <NavBar />
 
                     <Header />
 
