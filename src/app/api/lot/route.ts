@@ -1,9 +1,44 @@
-import { NextApiRequest, NextApiResponse } from 'next'
-import { decodeSession } from '@/auth'
-import Joi from 'joi'
-import prisma from '@/db'
+import { decodeSession } from "@/auth"
+import { NextResponse as Res } from "next/server"
+import { cookies } from 'next/headers'
+import { decode } from "next-auth/jwt"
+import prisma from "@/db"
+import Joi from "joi"
 
+async function decodeToken() {
+    const cookieStore = cookies()
+    const sessionToken = cookieStore.get('next-auth.session-token')?.value
 
+    if (typeof sessionToken !== 'string') {
+        return null
+    }
+    return await decode({
+        token: sessionToken,
+        secret: process.env.NEXTAUTH_SECRET || ''
+    })
+
+}
+
+export async function GET(req: Request) {
+    const token = await decodeToken()
+    if (!(token && token.sub)) {
+        return Res.json({ message: 'Unauthorized' }, { status: 401 })
+    }
+    const userId = token.sub
+
+    try {
+        const parkingLots = await prisma.$queryRaw`
+            SELECT * FROM
+                (SELECT * FROM ParkingLotManager WHERE userId = ${userId}) AS PLM
+                JOIN ParkingLot ON PLM.parkingLotId = ParkingLot.id
+        `
+        return Res.json({ data: parkingLots }, { status: 200 })
+    }
+    catch (error) {
+        console.error(error)
+        return Res.json({ message: 'Internal server error' }, { status: 500 })
+    }
+}
 const createLotSchema = Joi.object({
     name: Joi.string().required().label('Name'),
     location: Joi.string().label('Location'),
@@ -20,16 +55,20 @@ const createLotSchema = Joi.object({
     carSpace: Joi.number().default(0).label('Car Space')
 })
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-    const token = await decodeSession(req)
+export async function POST(req: Request) {
+
+    const token = await decodeToken()
     if (!(token && token.sub)) {
-        return res.status(401).json({ message: 'Unauthorized' })
+        return Res.json({ message: 'Unauthorized' }, { status: 401 })
     }
+
     const userId = token.sub
 
-    const { error, value } = createLotSchema.validate(req.body)
+    const postData = await req.json()
+
+    const { error, value } = createLotSchema.validate(postData)
     if (error) {
-        return res.status(400).json({ message: error.details[0].message })
+        return Res.json({ message: error.details[0].message }, { status: 400 })
     }
     try {
         const parkingLot = await prisma.parkingLot.create({
@@ -54,13 +93,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
         })
 
-        return res.status(201).json({
+        return Res.json({
             success: true,
             data: parkingLot
+        }, {
+            status: 201
         })
     }
     catch (error) {
-        return res.status(500).json({ message: 'Internal server error' })
+        return Res.json({ message: 'Internal server error' }, { status: 500 })
     }
-
 }

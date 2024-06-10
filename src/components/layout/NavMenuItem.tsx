@@ -5,7 +5,7 @@ import { ListItem, ListItemButton, ListItemContent, Typography, List, Box, IconB
 import React, { ReactElement, useEffect } from "react"
 import { usePathname } from 'next/navigation'
 import Link from "next/link"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import useLocalStorage from '@/hooks/useLocalStorage'
 
 function isMatch(path: string, fullPath: string) {

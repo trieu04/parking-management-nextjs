@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useContext } from 'react'
 import Box from '@mui/joy/Box'
 import { LayoutContext } from '@/components/layout/LayoutContext'
@@ -14,13 +16,12 @@ type LotType = {
 }
 
 const Dashboard = () => {
-    const { setHeaderText, setMainTitle } = useContext(LayoutContext)
     const [openCreateLot, setOpenCreateLot] = React.useState(false)
     const [lotsLoading, setLotLoading] = React.useState(true)
     const [lots, setLots] = React.useState<LotType[]>([])
     useEffect(() => {
-        setHeaderText('Parking Management App')
-        setMainTitle('Dashboard')
+        // setHeaderText('Parking Management App')
+        // setMainTitle('Dashboard')
 
         setLotLoading(true)
         fetch('/api/lot')
@@ -52,7 +53,7 @@ const Dashboard = () => {
             <Box height="16px"></Box>
             <Grid container spacing="16px">
 
-                {lots.length > 0 &&
+                {lots && lots.length > 0 &&
                     lots.map((item, index) => {
                         return (
                             <Grid key={index} md={4} sm={6} xs={12}>
@@ -66,7 +67,5 @@ const Dashboard = () => {
         </Box>
     )
 }
-
-Dashboard.layoutName = "dashboard"
 
 export default Dashboard

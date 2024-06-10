@@ -1,13 +1,14 @@
+'use client'
+
 import React, { useState } from 'react'
 import { TextField, Button, Typography, Container, Box, Input, Alert, FormLabel, IconButton } from '@mui/joy'
 import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import type MuiJoyType from '@mui/joy'
 import Link from 'next/link'
 import { CloseRounded } from '@mui/icons-material'
-import { PageWithLayout } from '@/pages/_app'
 
-const SignIn: PageWithLayout = () => {
+export default function () {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [message, setMessage] = useState('')
@@ -91,7 +92,3 @@ const SignIn: PageWithLayout = () => {
         </Container>
     )
 }
-
-SignIn.layoutName = 'auth'
-
-export default SignIn

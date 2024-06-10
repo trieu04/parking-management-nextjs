@@ -1,10 +1,9 @@
-import NextAuth from "next-auth"
+import NextAuth, { AuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import prisma from "@/db"
 import bcrypt from "bcryptjs"
 import type { AdapterUser } from "next-auth/adapters"
 
-// next-auth.d.ts
 import { DefaultSession } from "next-auth"
 import { NextRequest } from "next/server"
 import { decode } from "next-auth/jwt"
@@ -51,7 +50,7 @@ export type Session = {
     expires: string,
 }
 
-export default NextAuth({
+export const authOptions: AuthOptions = {
     providers: [
         credentialProvider
     ],
@@ -69,7 +68,9 @@ export default NextAuth({
     session: {
         strategy: "jwt"
     }
-})
+}
+
+export default NextAuth(authOptions)
 
 
 export async function decodeSession(req: NextApiRequest | GetServerSidePropsContext["req"]) {

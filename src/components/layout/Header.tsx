@@ -8,8 +8,6 @@ import { LayoutContext } from "./LayoutContext"
 
 
 export default function AppHeader() {
-    const { headerText } = useContext(LayoutContext)
-
     return (
         <Box component="header"
             sx={{
@@ -19,11 +17,11 @@ export default function AppHeader() {
                 zIndex: 1000,
             }}
         >
-            <GlobalStyles styles={(theme) => ({
+            <GlobalStyles styles={{
                 ':root': {
                     '--Header-height': '52px'
                 }
-            })} />
+            }} />
             <Box
                 sx={{
                     position: 'absolute',
@@ -58,11 +56,8 @@ export default function AppHeader() {
                                 }
                             }}
                         >
-                            <IconButton onClick={() => toggleNavBar()} title="Toggle Sidebar">
-                                <MenuIcon />
-                            </IconButton>
                         </Box>
-                        <Typography level="title-lg">{headerText}</Typography>
+                        <Typography level="title-lg">Parking Management App</Typography>
                     </Box>
                     <Box sx={{ flexShrink: 0 }}>
                         <Account />

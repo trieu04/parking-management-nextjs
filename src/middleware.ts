@@ -10,5 +10,6 @@ export const config = {
     matcher: [
         "/lot/:path*",
         "/dashboard/:path*",
+        "/home/:path*"
     ]
 }

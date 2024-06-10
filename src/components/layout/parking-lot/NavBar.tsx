@@ -1,5 +1,7 @@
-import React from 'react'
+'use client'
 
+
+import React from 'react'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import SupportRoundedIcon from '@mui/icons-material/SupportRounded'
 import Box from '@mui/joy/Box'
@@ -29,13 +31,13 @@ export default function NavBar() {
                 zIndex: 10000,
             }}
         >
-            <GlobalStyles styles={(theme) => ({
+            <GlobalStyles styles={{
                 ':root': {
                     '--NavBar-width': '240px',
                     '--Header-height': '52px',
                     '--NavBar-mobileSlideIn': 0,
                 }
-            })} />
+            }} />
             <Box
                 onClick={() => toggleNavBar()}
                 sx={{
@@ -96,7 +98,7 @@ export default function NavBar() {
                             '--ListItem-radius': (theme) => theme.vars.radius.sm,
                         }}
                     >
-                        <NavMenuItem title="Dashboard" path="/dashboard" />
+                        <NavMenuItem title="Dashboard" path="/home" />
                         <NavMenuItemNested title="Parking Lots" path="/lots" nested={[
                             { title: "Lot 1", path: "/lot/id1" },
                             { title: "Lot 2", path: "/lot/id2" }

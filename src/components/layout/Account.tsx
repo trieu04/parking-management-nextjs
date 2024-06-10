@@ -1,8 +1,12 @@
+"use client"
+
 import { Box, Avatar, Typography, IconButton, Button } from "@mui/joy"
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded"
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signIn, signOut, SessionProvider } from "next-auth/react"
+import { getServerSession } from "next-auth"
+import { use } from "react"
 
-export default function Account() {
+export default function AccountCard() {
     const { data: session } = useSession()
     return (
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>

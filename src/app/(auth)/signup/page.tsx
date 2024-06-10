@@ -1,14 +1,13 @@
-// components/SignupForm.tsx
+'use client'
 
 import React, { useState } from 'react'
 import { TextField, Button, Typography, Container, Box, Input, FormLabel, Alert, IconButton } from '@mui/joy'
 import type MuiJoyType from '@mui/joy'
 import { CloseRounded } from '@mui/icons-material'
 import Link from 'next/link'
-import { PageWithLayout } from '@/pages/_app'
 
 
-const Signup: PageWithLayout = () => {
+export default function () {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [message, setMessage] = useState('')
@@ -87,14 +86,10 @@ const Signup: PageWithLayout = () => {
                         {message}
                     </Alert>
                 }
-                <Button variant="outlined" color="primary" fullWidth component={Link} href='/signin' >
+                <Button variant="outlined" color="primary" fullWidth component={Link} href='/login' >
                     or Sign In Here
                 </Button>
             </Box>
         </Container>
     )
 }
-
-Signup.layoutName = 'auth'
-
-export default Signup
