@@ -7,13 +7,11 @@ import MainWarp from "../MainWarp"
 import { LayoutContextProvider } from "@/components/layout/LayoutContext"
 
 type Props = {
-    children: React.ReactNode,
-    hideNavBar?: boolean
+    children: React.ReactNode
 }
 
-export default function LotLayout({
-    children,
-    hideNavBar
+export default function DashboardLayout({
+    children
 }: Props) {
 
     return (

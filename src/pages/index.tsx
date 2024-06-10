@@ -38,6 +38,6 @@ const IndexPage: PageWithLayout<Props> = ({
   )
 }
 
-IndexPage.layoutName = 'home'
+IndexPage.layoutName = 'dashboard'
 
 export default IndexPage

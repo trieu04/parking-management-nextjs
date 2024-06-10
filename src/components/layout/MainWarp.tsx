@@ -19,11 +19,13 @@ export default function MainWarp({
                 overflow: 'auto',
                 position: 'relative',
                 maxHeight: '100vh',
+                
             }}
         >
             <Box
                 sx={{
-                    position: 'absolute'
+                    position: 'absolute',
+                    width: '100%'
                 }}
             >
 

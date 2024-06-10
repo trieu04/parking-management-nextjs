@@ -16,7 +16,7 @@ export default function AppHeader() {
                 gridArea: 'header',
                 position: 'sticky',
                 top: 0,
-                zIndex: 10010,
+                zIndex: 1000,
             }}
         >
             <GlobalStyles styles={(theme) => ({
