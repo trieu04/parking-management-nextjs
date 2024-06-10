@@ -1,40 +1,42 @@
+// components/SignupForm.tsx
+
 import React, { useState } from 'react'
-import { TextField, Button, Typography, Container, Box, Input, Alert, FormLabel, IconButton } from '@mui/joy'
-import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/router'
+import { TextField, Button, Typography, Container, Box, Input, FormLabel, Alert, IconButton } from '@mui/joy'
 import type MuiJoyType from '@mui/joy'
-import Link from 'next/link'
 import { CloseRounded } from '@mui/icons-material'
+import Link from 'next/link'
 import { PageWithLayout } from '@/pages/_app'
 
-const SignIn: PageWithLayout = () => {
+
+const Signup: PageWithLayout = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [message, setMessage] = useState('')
     const [messageColor, setMessageColor] = useState<MuiJoyType.ColorPaletteProp>('neutral')
-    const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+
         try {
-            const result = await signIn('credentials', {
-                redirect: false,
-                email,
-                password
+            const response = await fetch('/api/auth/signup', {
+                method: 'POST',
+                body: JSON.stringify({ email, password }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             })
 
-            if (result?.ok) {
-                router.push('/')
-            }
-            else {
+            const data = await response.json()
+
+            if (response.status == 400) {
+                setMessage(data.message)
                 setMessageColor('danger')
-                setMessage("Failed to sign in")
-                setMessageColor('danger')
+                return
             }
-        }
-        catch (error) {
-            console.error(error)
-            setMessage("Unknown error occurred. Please try again later.")
+
+            setMessage(JSON.stringify(data))
+        } catch (error) {
+            setMessage('Unknown error occurred. Please try again later.')
             setMessageColor('danger')
         }
     }
@@ -44,15 +46,16 @@ const SignIn: PageWithLayout = () => {
             <Box
                 component="form"
                 onSubmit={handleSubmit}
-                sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 4 }}
+                sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 4, width: '100%' }}
+                maxWidth="sm"
             >
                 <Typography>
-                    Sign In
+                    Sign Up
                 </Typography>
                 <FormLabel>Email</FormLabel>
                 <Input
-                    title='Email'
-                    variant='outlined'
+                    title="Email"
+                    variant="outlined"
                     fullWidth
                     required
                     type="email"
@@ -70,7 +73,7 @@ const SignIn: PageWithLayout = () => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
                 <Button type="submit" variant="solid" color="primary" fullWidth>
-                    Sign In
+                    Sign Up
                 </Button>
                 {message &&
                     <Alert
@@ -84,14 +87,14 @@ const SignIn: PageWithLayout = () => {
                         {message}
                     </Alert>
                 }
-                <Button variant="outlined" color="primary" fullWidth component={Link} href="/signup">
-                    Create a account
+                <Button variant="outlined" color="primary" fullWidth component={Link} href='/signin' >
+                    or Sign In Here
                 </Button>
             </Box>
         </Container>
     )
 }
 
-SignIn.layoutName = 'auth'
+Signup.layoutName = 'auth'
 
-export default SignIn
+export default Signup

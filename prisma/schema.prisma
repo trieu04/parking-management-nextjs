@@ -8,78 +8,95 @@ generator client {
 }
 
 model User {
-  id           String  @id @default(cuid())
-  email        String  @unique
-  name         String?
-  username     String? @unique
-  image        String?
-  passwordHash String?
-  createdAt  DateTime?    @default(now())
-  updatedAt  DateTime?    @updatedAt
-
-  ParkingLot ParkingLot[]
-}
-
-model ParkingLot {
   id        String    @id @default(cuid())
-  name      String
-  location  String?
+  email     String    @unique
+  name      String?
+  username  String?   @unique
   image     String?
-  ownerId   String
+  password  String?
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 
-  User        User          @relation(fields: [ownerId], references: [id])
-  ParkingZone ParkingZone[]
+  ParkingLots ParkingLotManager[]
+}
+
+model ParkingLot {
+  id                   String    @id @default(cuid())
+  name                 String
+  location             String?
+  currency             String?
+  bicyclePriceHourly   Decimal?  @db.Decimal(14, 2)
+  bicycleMiniumPrice   Decimal?  @db.Decimal(14, 2)
+  motorbikePriceHourly Decimal?  @db.Decimal(14, 2)
+  motorbikeMiniumPrice Decimal?  @db.Decimal(14, 2)
+  carPriceHourly       Decimal?  @db.Decimal(14, 2)
+  carMiniumPrice       Decimal?  @db.Decimal(14, 2)
+  photoUrl             String?
+  createdAt            DateTime? @default(now())
+  updatedAt            DateTime? @updatedAt
+
+  ParkingZone   ParkingZone[]
+  Users         ParkingLotManager[]
+  MonthlyTicket MonthlyTicket[]
+}
+
+model ParkingLotManager {
+  userId       String
+  parkingLotId String
+  role         String
+
+  User       User       @relation(fields: [userId], references: [id])
+  ParkingLot ParkingLot @relation(fields: [parkingLotId], references: [id])
+
+  @@id([userId, parkingLotId])
 }
 
 model ParkingZone {
-  id           String    @id @default(cuid())
-  zoneCode     String
-  bikeSpace    Int
-  carSpace     Int
-  parkingLotId String
-  createdAt    DateTime? @default(now())
-  updatedAt    DateTime? @updatedAt
+  id             String    @id @default(cuid())
+  parkingLotId   String
+  zoneName       String
+  bicycleSpace   Int
+  motorbikeSpace Int
+  carSpace       Int
+  createdAt      DateTime? @default(now())
+  updatedAt      DateTime? @updatedAt
 
-  parkingLot    ParkingLot      @relation(fields: [parkingLotId], references: [id])
-  MonthlyTicket MonthlyTicket[]
+  ParkingLot    ParkingLot      @relation(fields: [parkingLotId], references: [id])
   ParkingTicket ParkingTicket[]
 }
 
 model Vehicle {
-  id           String  @id @default(cuid())
-  licensePlate String
-  type         String
+  id           String    @id @default(cuid())
+  licensePlate String    @unique
+  type         String?
   color        String?
-
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @updatedAt
 
   MonthlyTicket MonthlyTicket[]
   ParkingTicket ParkingTicket[]
 }
 
 model MonthlyTicket {
-  id            String    @id @default(cuid())
-  startDate     DateTime
-  endDate       DateTime
-  parkingZoneId String
-  vehicleId     String
-  createdAt     DateTime? @default(now())
-  updatedAt     DateTime? @updatedAt
+  id           String    @id @default(cuid())
+  parkingLotId String
+  vehicleId    String
+  startDate    DateTime
+  endDate      DateTime
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @updatedAt
 
-  ParkingZone ParkingZone @relation(fields: [parkingZoneId], references: [id])
-  Vehicle     Vehicle     @relation(fields: [vehicleId], references: [id])
+  ParkingLot ParkingLot @relation(fields: [parkingLotId], references: [id])
+  Vehicle    Vehicle    @relation(fields: [vehicleId], references: [id])
 }
 
 model ParkingTicket {
   id            String    @id @default(cuid())
-  tiketCode     String
-  parkingAt     DateTime
-  takingAt      DateTime?
   parkingZoneId String
   vehicleId     String
+  tiketCode     String    @unique
+  parkingAt     DateTime
+  takingAt      DateTime?
   createdAt     DateTime? @default(now())
   updatedAt     DateTime? @updatedAt
 
@@ -89,15 +106,13 @@ model ParkingTicket {
 }
 
 model Invoice {
-  id String @id @default(cuid())
-
-  amount        Decimal @db.Decimal(10, 2)
-  paymentMethod String
-  status        String
-
-  parkingTicket   ParkingTicket @relation(fields: [parkingTicketId], references: [id])
+  id              String    @id @default(cuid())
   parkingTicketId String
+  amount          Decimal   @db.Decimal(10, 2)
+  paymentMethod   String
+  status          String
+  createdAt       DateTime? @default(now())
+  updatedAt       DateTime? @updatedAt
 
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  ParkingTicket ParkingTicket @relation(fields: [parkingTicketId], references: [id])
 }
